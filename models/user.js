@@ -8,17 +8,12 @@ const UserSchema = new Schema({
   email: { type: String, unique: true, required: true, trim: true, unique: true },
   password: { type: String, required: true }
   passwordConf: { type: String, required: true },
-  birthday: Date,
-  bio: { type: String, max: 2000 },
-  friends: [{ type: Schema.ObjectId, ref: 'User' }],
-  questionPosted: [{ type: Schema.ObjectId, ref: 'Question' }],
-  questionSeen: [{ type: Schema.ObjectId, ref: 'Question' }],
-  correctAnswer: Number,
-  wrongAnswer: Number,
-
-  // country: { type: String, required: true },
-  // total_answered: Number,
-  // streak: Number,
-  // pluses: Number,
-  // dp: { type: String, max: 300 }
+  questionsPosted: [{ type: Schema.ObjectId, ref: 'Question' }],
+  questionsAttempted: [{ type: Schema.ObjectId, ref: 'Question' }],
+  questionsCorrect: [{ type: Schema.ObjectId, ref: 'Question' }]
+    // birthday: Date,
+    // bio: { type: String, max: 2000 },
+    // friends: [{ type: Schema.ObjectId, ref: 'User' }],
+    // country: { type: String, required: true },
+    // dp: { type: String, max: 300 }
 });
