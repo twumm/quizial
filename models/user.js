@@ -6,7 +6,7 @@ const UserSchema = new Schema({
   // last_name: { type: String, required: true, max: 60 },
   username: { type: String, unique: true, required: true, trim: true, max: 40, unique: true },
   email: { type: String, unique: true, required: true, trim: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
   passwordConf: { type: String, required: true },
   questionsPosted: [{ type: Schema.ObjectId, ref: 'Question' }],
   questionsAttempted: [{ type: Schema.ObjectId, ref: 'Question' }],
