@@ -1,9 +1,9 @@
 extends layout
 block content
 
-  h1= title
+  h4= title
     div(class='row')
-      div(class='col-sm-5')
+      div(class='col-sm-6')
         form(method='POST' action='/quiz/user/signin')
           div.form-group
             p Login
@@ -13,9 +13,9 @@ block content
             input#password.form-control(type='password' name='password' placeholder='Password' required='true')
           button.btn.btn-outline-primary(type='submit') Log In
 
-      div(class='col-sm-2')
+      //- div(class='col-sm-')
 
-      div(class='col-sm-5')
+      div(class='col-sm-6')
         form(method='POST' action='/quiz/user/signup')
           div.form-group
             p Sign Up
