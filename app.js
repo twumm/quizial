@@ -16,10 +16,23 @@ mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));
 
+// Use sessions for tracking logins
+app.use(session({
+  secret: 'awesome',
+  resave: true,
+  saveUninitialized: false,
+  // cookie: {
+  //     maxAge: 600000
+  // },
+  store: new MongoStore({
+    mongooseConnection: db
+  })
+}));
+
 const index = require('./routes/index');
 const users = require('./routes/users');
 const quiz = require('./routes/quiz');
-const questions = require('./routes//questions');
+const questions = require('./routes/questions');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
