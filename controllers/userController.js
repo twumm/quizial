@@ -5,14 +5,24 @@ const { body, validationResult } = require('express-validator/check/');
 const sanitizeBody = require('express-validator/filter');
 
 
+// Display User signup form on GET.
+exports.user_signup_get = function(req, res, next) {
+  res.send('NOT IMPLEMENTED: User signup get');
+}
+
+// Handle User signup on POST.
+exports.user_signup_post = function(req, res, next) {
+  res.send('NOT IMPLEMENTED: User signup post');
+}
+
 // Display User create form on GET.
-exports.user_create_get = function(req, res, next) {
-  res.send('NOT IMPLEMENTED: User create get');
+exports.user_signin_get = function(req, res, next) {
+  res.send('NOT IMPLEMENTED: User signin get');
 }
 
 // Handle User create on POST.
-exports.user_create_post = function(req, res, next) {
-  res.send('NOT IMPLEMENTED: User create post');
+exports.user_signin_post = function(req, res, next) {
+  res.send('NOT IMPLEMENTED: User signin post');
 }
 
 // Display User update form on GET.
