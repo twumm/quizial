@@ -2,6 +2,8 @@ extends layout
 block content
 
   h4= title
+    if signinError || signupError
+      p= signinError || signupError 
     div(class='row')
       div(class='col-sm-6')
         form(method='POST' action='/quiz/user/signin')
