@@ -8,13 +8,19 @@ const { sanitizeBody } = require('express-validator/filter');
 
 // Display Question create form on GET.
 exports.question_create_get = function(req, res, next) {
-  res.send('NOT IMPLEMENTED: Question create get');
+  res.render('question_form', { title: 'Create a question' });
+  // res.send('NOT IMPLEMENTED: Question create get');
 }
 
 // Handle Question create on POST.
-exports.question_create_post = function(req, res, next) {
+exports.question_create_post = [
+  // Validate input fields.
+  body('')
+]
+
+/*function(req, res, next) {
   res.send('NOT IMPLEMENTED: Question create post');
-}
+}*/
 
 // Display Question update form on GET.
 exports.question_update_get = function(req, res, next) {
