@@ -18,7 +18,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error'));
 
 // Use sessions for tracking logins
 app.use(session({
-  secret: 'awesome',
+  secret: 'quizial',
   resave: true,
   saveUninitialized: false,
   // cookie: {
