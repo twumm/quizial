@@ -29,7 +29,7 @@ app.use(session({
   })
 }));
 
-const index = require('./routes/index');
+// const index = require('./routes/index');
 const users = require('./routes/users');
 const quiz = require('./routes/quiz');
 const questions = require('./routes/questions');
@@ -46,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
+app.use('/', quiz);
 // app.use('/users', users);
 app.use('/quiz', quiz, questions, users);
 
