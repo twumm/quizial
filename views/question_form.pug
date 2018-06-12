@@ -1,0 +1,18 @@
+extends layout
+block content
+
+  h4= title
+  form(method='POST')
+    div.form-group
+      label(for='question') Question:
+      input#question.form-control(type='text' name='question' placeholder='Question' required=true)
+      label(for='answer') Correct answer:
+      input#correctAnswer.form-control(type='text' name='correctAnswer' placeholder='Correct answer' required=true)
+      br
+      label(for='wrongOptions') Wrong options:
+      input#wrongOption.form-control(type='text' name='wrongOptionOne' placeholder='Wrong option 1' required=true)
+      br
+      input#wrongOption.form-control(type='text' name='wrongOptionTwo' placeholder='Wrong option 2' required=true)
+      br
+      input#wrongOption.form-control(type='text' name='wrongOptionThree' placeholder='Wrong option 3' required=true)     
+    button.btn.btn-primary(type='submit') Submit
