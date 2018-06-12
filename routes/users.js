@@ -18,6 +18,9 @@ router.post('/user/signin', user_controller.user_signin_post);
 // GET request for user profile.
 router.get('/user/:username', user_controller.user_profile);
 
+// GET request for user profile.
+router.get('/user/logout', user_controller.user_logout_get);
+
 // GET request to update a User.
 router.get('/user/:id/update', user_controller.user_update_get);
 
