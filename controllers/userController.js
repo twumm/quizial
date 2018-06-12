@@ -106,6 +106,20 @@ exports.user_profile = function(req, res, next) {
     // res.send('NOT IMPLEMENTED: User detail get ' + req.params.username);
 };
 
+// Log out the user.
+exports.user_logout_get = function(req, res, next) {
+  if (req.session) {
+    // Delete the session object
+    req.session.destroy(function(err) {
+      if (err) {
+        return next(err);
+      } else {
+        return res.redirect('/');
+      }
+    });
+  }
+}
+
 // Display User update form on GET.
 exports.user_update_get = function(req, res, next) {
   res.send('NOT IMPLEMENTED: User update get');
