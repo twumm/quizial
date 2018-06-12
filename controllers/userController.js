@@ -89,7 +89,7 @@ exports.user_signin_post = [
           res.render('user_form', { title: 'Welcome! Enter details to continue', signinError: 'Wrong username, email or password', user: user })
         } else {
           req.session.userId = user._id;
-          res.redirect('/');
+          res.redirect('/quiz/user/' + user.username);
         }
       });
     }
@@ -97,9 +97,14 @@ exports.user_signin_post = [
 ];
 
 // Display User detail form on GET.
-exports.user_detail = function(req, res, next) {
-  res.send('NOT IMPLEMENTED: User detail get ' + req.params.username);
-}
+exports.user_profile = function(req, res, next) {
+  User.findOne({ username: req.params.username })
+    .exec(function(err, user) {
+      if (err) { return next(err) }
+      res.render('user_profile', { title: 'User detail', user: user });
+    })
+    // res.send('NOT IMPLEMENTED: User detail get ' + req.params.username);
+};
 
 // Display User update form on GET.
 exports.user_update_get = function(req, res, next) {
