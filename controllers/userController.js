@@ -101,7 +101,7 @@ exports.user_profile = function(req, res, next) {
   User.findOne({ username: req.params.username })
     .exec(function(err, user) {
       if (err) { return next(err) }
-      res.render('user_profile', { title: 'User detail', user: user });
+      res.render('user_profile', { title: 'User detail', user: user, userLoggedIn: req.session.userId });
     })
     // res.send('NOT IMPLEMENTED: User detail get ' + req.params.username);
 };
@@ -114,9 +114,11 @@ exports.user_logout_get = function(req, res, next) {
       if (err) {
         return next(err);
       } else {
-        return res.redirect('/');
+        return res.redirect('/quiz');
       }
     });
+  } else {
+    console.log('Logout not working');
   }
 }
 
