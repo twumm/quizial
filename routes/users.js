@@ -15,11 +15,11 @@ router.get('/user/signin', user_controller.user_signin_get);
 // POST request to signin a User.
 router.post('/user/signin', user_controller.user_signin_post);
 
-// GET request for user profile.
-router.get('/user/:username', user_controller.user_profile);
+// GET request log user out.
+router.get('/user/logout', user_controller.user_logout_get);
 
 // GET request for user profile.
-router.get('/user/logout', user_controller.user_logout_get);
+router.get('/user/:username', user_controller.user_profile);
 
 // GET request to update a User.
 router.get('/user/:id/update', user_controller.user_update_get);
