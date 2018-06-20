@@ -15,6 +15,12 @@ router.get('/user/signin', user_controller.user_signin_get);
 // POST request to signin a User.
 router.post('/user/signin', user_controller.user_signin_post);
 
+// GET request to change User password/
+// router.get('/user/changepassword', user_controller.user_changepassword_get)
+
+// POST request to change User password/
+router.post('/user/changepassword', user_controller.user_changepassword_post)
+
 // GET request log user out.
 router.get('/user/logout', user_controller.user_logout_get);
 
