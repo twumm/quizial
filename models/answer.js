@@ -6,3 +6,5 @@ const AnswerSchema = new Schema({
   answerOption: [{ type: String, max: 300, required: true }],
   question: { type: Schema.ObjectId, ref: 'Question', required: true },
 });
+
+module.exports = mongoose.model('Answer', AnswerSchema);
