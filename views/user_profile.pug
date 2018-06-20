@@ -7,7 +7,25 @@ block content
   p= user.email
   p= user.questionsPosted
 
-  a(href='/quiz/user/changepassword') Change password
+  div
+    a(href='#' data-toggle='modal' data-target='#'+user.id+'ChangePsdModal') Change password
+    div.modal.fade(id=user.id+'ChangePsdModal' tabindex='-1' role='dialog' aria-labelledby=user.id+'Label' aria-hidden='true')
+      div.modal-dialog(role='document')
+        div.modal-content
+          div.modal-header
+            h5.modal-title(id=user.id+'Label') Change your password
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') &times;
+          div.modal-body.text-left
+            form(method='POST', action='/user/changepassword')
+              div.form-group
+                label(for='title') New password:
+                input#new-password.form-control(type='text' placeholder='New Password' name='newpassword' required='true')
+                label(for='title') Confirm password:
+                input#confirm-password.form-control(type='text' placeholder='Confirm Password' name='confirmpassword' required='true')
+              div.modal-footer
+                button.btn.btn-secondary(type='button' data-dismiss='modal') Cancel
+                button.btn.btn-success(type='submit') Change Password
   br
   if userLoggedIn
     a(href='/quiz/user/logout') Logout
