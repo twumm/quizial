@@ -6,9 +6,11 @@ const QuestionSchema = new Schema({
   usersCorrect: [{ type: Schema.ObjectId, ref: 'User' }],
   usersAttempted: [{ type: Schema.ObjectId, ref: 'User' }],
   submittedBy: { type: Schema.ObjectId, ref: 'User' },
-  dateCreated: { type: Date, default: Date.now },
-  dateUpdated: { type: Date, default: Date.now }
+  dateCreated: { type: Date, default: Date.now, required: true },
+  dateUpdated: { type: Date, default: Date.now, required: true }
   // seenCount: { type: Number, default: 0 },
   // correctCount: { type: Number, default: 0 },
   // wrongCount: { type: Number, default: 0 },
 });
+
+module.exports = mongoose.model('Question', QuestionSchema);
