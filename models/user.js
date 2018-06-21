@@ -80,7 +80,18 @@ passport.use(new LocalStrategy(
       return done(null, user);
     });
   }
-))
+));
+
+// Add serialize and deserialize passport methods to allow user stay logged in.
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 
 const User = mongoose.model('User', UserSchema)
 module.exports = User;
