@@ -52,6 +52,32 @@ UserSchema.statics.authenticate = function(userInput, password, callback) {
     })
 }
 
+// Setup LocalStrategy with passport for username/password authentication.
+passport.use(new LocalStrategy(function(username, password, done) {
+  User.findOne({ $or: [{ username: userInput }, { email: userInput }] }, function(err, user) {
+    if (err) return done(err);
+    if (!user) return done(null, false, { message: 'Incorrect username.' });
+    user.comparePassword(password, function(err, isMatch) {
+      if (isMatch) {
+        return done(null, user);
+      } else {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+    });
+  });
+}));
+
+// Add serialize and deserialize passport methods to allow user stay logged in.
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
 // Hash the password before saving to the database.
 UserSchema.pre('save', function(next) {
   var user = this;
@@ -66,32 +92,13 @@ UserSchema.pre('save', function(next) {
   });
 });
 
-// Setup LocalStrategy with passport for username/password authentication.
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-));
-
-// Add serialize and deserialize passport methods to allow user stay logged in.
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
+// Perform password verification when user attempts sign-in.
+UserSchema.methods.comparePassword = function(candidatePassword, callback) {
+  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+    if (err) { return cb(err); }
+    callback(null, isMatch);
   });
-});
+};
 
 const User = mongoose.model('User', UserSchema)
 module.exports = User;
