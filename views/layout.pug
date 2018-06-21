@@ -1,7 +1,7 @@
 doctype html
 html(lang='en')
   head
-    title= title
+    title Quizial - #{title}
     //- Require meta tags
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1')
@@ -20,5 +20,26 @@ html(lang='en')
     //- script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
     //- script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous")
   body
-    div(class='container-fluid')
-      block content
+    nav(class='navbar navbar-light bg-light navbar-expand-lg border-bottom')
+      div(class='container')
+        a(href='/') Quizial
+        button(class='navbar-toggler' data-toggle='collapse' data-target='#navbarCollapse')
+          span(class='navbar-toggler-icon')
+        div(class='collapse navbar-collapse' id='navbarCollapse')
+          ul(class='navbar-nav ml-auto')
+            //- li(class='navbar-item active') User 
+            if !user
+              li(class='navbar-item') 
+                a(href='/users/user/login') Login
+                | / 
+              li(class='navbar-item')
+                a(href='/users/user/signup')  Sign up
+            else
+              div.btn-group
+                button.btn.btn-outline-secondary.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                div.dropdown-menu.dropdown-menu-center
+                  a(href='/users/user/logout')
+                    button.dropdown-item(type='button') Logout
+  div(class='container')
+    block content
+
