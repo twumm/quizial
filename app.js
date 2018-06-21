@@ -33,6 +33,10 @@ app.use(session({
   })
 }));
 
+// Add Passport middleware.
+app.use(passport.initialize());
+app.use(passport.session());
+
 // const index = require('./routes/index');
 const users = require('./routes/users');
 const quiz = require('./routes/quiz');
