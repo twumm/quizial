@@ -30,15 +30,15 @@ html(lang='en')
             //- li(class='navbar-item active') User 
             if !user
               li(class='navbar-item') 
-                a(href='/users/user/login') Login
+                a(href='/quiz/user/signin') Login
                 | / 
               li(class='navbar-item')
-                a(href='/users/user/signup')  Sign up
+                a(href='/quiz/user/signup')  Sign up
             else
               div.btn-group
-                button.btn.btn-outline-secondary.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                button.btn.btn-outline-secondary.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') #{user.username}
                 div.dropdown-menu.dropdown-menu-center
-                  a(href='/users/user/logout')
+                  a(href='/quiz/user/logout')
                     button.dropdown-item(type='button') Logout
   div(class='container')
     block content
