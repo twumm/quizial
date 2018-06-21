@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
+const passport = require('passport'),
+  LocalStrategy = require('passport-local').Strategy;
 
 const UserSchema = new Schema({
   // first_name: { type: String, required: true, max: 60 },
@@ -8,7 +10,9 @@ const UserSchema = new Schema({
   username: { type: String, unique: true, required: true, trim: true, max: 40, unique: true },
   email: { type: String, unique: true, required: true, trim: true, unique: true },
   password: { type: String, required: true },
-  passwordConf: { type: String, required: true },
+  // passwordConf: { type: String, required: true },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
   questionsPosted: [{ type: Schema.ObjectId, ref: 'Question' }],
   questionsAttempted: [{ type: Schema.ObjectId, ref: 'Question' }],
   questionsCorrect: [{ type: Schema.ObjectId, ref: 'Question' }]
@@ -51,6 +55,9 @@ UserSchema.statics.authenticate = function(userInput, password, callback) {
 // Hash the password before saving to the database.
 UserSchema.pre('save', function(next) {
   var user = this;
+
+  if (!user.isModified('password')) { return next(); }
+
   bcrypt.hash(user.password, 10, function(err, hash) {
     if (err) { return next(err); }
     // No error so hash the password
@@ -58,6 +65,22 @@ UserSchema.pre('save', function(next) {
     next();
   });
 });
+
+// Setup LocalStrategy with passport for username/password authentication.
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+))
 
 const User = mongoose.model('User', UserSchema)
 module.exports = User;
