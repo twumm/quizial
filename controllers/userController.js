@@ -60,6 +60,9 @@ exports.user_signup_post = [
 
 // Display User create form on GET.
 exports.user_signin_get = function(req, res, next) {
+  if (req.user) {
+    res.redirect('/quiz/user/' + req.user.username)
+  }
   res.render('user_form', { title: 'Welcome! Enter details to continue', user: req.user });
   // res.send('NOT IMPLEMENTED: User signin get');
 }
