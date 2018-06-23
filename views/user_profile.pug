@@ -17,7 +17,7 @@ block content
             button.close(type='button' data-dismiss='modal' aria-label='Close')
               span(aria-hidden='true') &times;
           div.modal-body.text-left
-            form(method='POST', action='/user/changepassword')
+            form(method='POST', action='/quiz/user/changepassword')
               div.form-group
                 label(for='title') New password:
                 input#new-password.form-control(type='text' placeholder='New Password' name='newpassword' required='true')
