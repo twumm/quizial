@@ -111,8 +111,40 @@ exports.user_signin_post = [
 // Handle change USER password on POST.
 exports.user_changepassword_post = [
   // Check if passwords meet minimum requirement
-  body('newpassword').isLength({ min: 5 }),
-  body('confirmpassword').isLength({ min: 5 }),
+  body('password').isLength({ min: 4 }),
+  body('confirmpassword').isLength({ min: 4 }),
+
+  // Sanitize fields.
+  sanitizeBody('*'),
+
+  // Process request.
+  (req, res, next) => {
+    // Save errors from validation, if any.
+    const errors = validationResult(req);
+    // Check if there are errors in the form values.
+    
+    // Query user from db.
+    User.findById(req.user.id)
+      .exec(function(err, user) {
+        if (err) { return next(err);}
+        // There are errors in the field values so render form with the values.
+        if (!errors.isEmpty()) {
+          res.redirect(user.url);
+        }
+        else {
+          user.password = req.body.password;
+          console.log(req.body.password);
+          // Save the user's new password.
+          user.save(function(err) {
+            if (err) { return next(err); }
+            // Successful so save login and redirect to user profile.
+            req.logIn(user, function(err) {
+              res.redirect(user.url);
+            });
+          });
+        }
+      })
+  }
 ]
 
 // Display User detail form on GET.
