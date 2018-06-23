@@ -54,10 +54,6 @@ exports.user_signup_post = [
   }
 ];
 
-// function(req, res, next) {
-//   res.send('NOT IMPLEMENTED: User signup post');
-// }
-
 // Display User create form on GET.
 exports.user_signin_get = function(req, res, next) {
   if (req.user) {
@@ -67,67 +63,45 @@ exports.user_signin_get = function(req, res, next) {
   // res.send('NOT IMPLEMENTED: User signin get');
 }
 
-// Handle User create on POST.
-exports.user_signin_post = function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
-    if (err) return next(err)
-    if (!user) {
-      return res.redirect('/quiz/user/')
-    }
-    req.logIn(user, function(err) {
-      if (err) return next(err);
-      return res.redirect('/quiz/user/' + user.username);
-    });
-  })(req, res, next);
-}
-
-/*exports.user_signin_post = [
+// Handle User signin on POST.
+exports.user_signin_post = [
   // Validate user input from the form.
-  body('userDetail', 'Username or email required').isLength({ min: 1 }).trim(),
+  body('username', 'Username or email required').isLength({ min: 1 }).trim(),
   body('password', 'Password required').isLength({ min: 1 }),
 
   // Sanitize fields using wildcats.
   sanitizeBody('*'),
 
-  // Process request
+  // Process request.
   (req, res, next) => {
     // Save errors from validation, if any.
     const errors = validationResult(req);
 
     // Create user object with the data entered.
-    const user = new User({
-      userDetail: req.body.userDetail,
+    const userData = new User({
+      username: req.body.username,
       password: req.body.password
     });
 
     // Check if there are errors in the form values.
     if (!errors.isEmpty()) {
       // There are errors so render form with the values.
-      res.render('user_form', { title: 'Welcome! Enter details to continued', signinError: 'Error in sign up. Please try again', user: user, errors: errors })
-    } else {
-    passport.authenticate('local', function(err, user, info) {
-      // console.log(local)
-      if (err) { return next(err); }
-      if (!user) {
-        return res.redirect('/quiz/user/signin')
-      }
-      req.logIn(user, function(err) {
-        if (err) { return next(err); }
-        return res.redirect('/');
-      });
-    });
-    // User.authenticate(req.body.userDetail, req.body.password, function(error, user) {
-    //   console.log(req.body.userDetail, req.body.password);
-    //   if (error || !user) {
-    //     res.render('user_form', { title: 'Welcome! Enter details to continue', signinError: 'Wrong username, email or password', user: user })
-    //   } else {
-    //     req.session.userId = user._id;
-    //     res.redirect('/quiz/user/' + user.username);
-    //   } 
-    // });
-    // }
+      res.render('user_form', { title: 'Welcome! Enter details to continued', signinError: 'Error in sign up. Please try again', user: userData, errors: errors })
+    }
+    else {
+      passport.authenticate('local', function(err, user, info) {
+        if (err) return next(err)
+        if (!user) {
+          return res.redirect('/quiz/user/signin')
+        }
+        req.logIn(user, function(err) {
+          if (err) return next(err);
+          return res.redirect('/quiz/user/' + user.username);
+        });
+      })(req, res, next);
+    }
   }
-];*/
+]
 
 // Handle change USER password on GET.
 // exports.user_changepassword_get = function(req, res, next) {
