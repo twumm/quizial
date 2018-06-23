@@ -3,11 +3,14 @@ const Question = require('../models/question');
 
 const { body, validationResult } = require('express-validator/check/');
 const { sanitizeBody } = require('express-validator/filter');
+const bcrypt = require('bcrypt');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 
 // Display User signup form on GET.
 exports.user_signup_get = function(req, res, next) {
-  res.render('user_form', { title: 'Welcome! Enter details to continue' });
+  res.render('user_form', { title: 'Welcome! Enter details to continue', user: req.user });
   // res.send('NOT IMPLEMENTED: User signup get');
 }
 
@@ -35,14 +38,17 @@ exports.user_signup_post = [
 
     if (!errors.isEmpty()) {
       // There are errors in the sign up form data.
-      res.render('user_form', { title: 'Welcome! Enter details to continue', signupError: 'Error in sign up. Please try again', user: user, errors: errors });
+      res.redirect('/quiz/user/signin');
     } else {
       // No errors so create user in db.
       user.save(function(err) {
         if (err) { return next(err); }
-        // Successful so redirect to user profile.
-        req.session.userId = user._id;
-        res.redirect(user.url);
+        // Successful so save login and redirect to user profile.
+        req.logIn(user, function(err) {
+          res.redirect(user.url);
+        });
+        // req.session.userId = user._id;
+        // res.redirect(user.url);
       });
     }
   }
@@ -54,12 +60,25 @@ exports.user_signup_post = [
 
 // Display User create form on GET.
 exports.user_signin_get = function(req, res, next) {
-  res.render('user_form', { title: 'Welcome! Enter details to continue' });
+  res.render('user_form', { title: 'Welcome! Enter details to continue', user: req.user });
   // res.send('NOT IMPLEMENTED: User signin get');
 }
 
 // Handle User create on POST.
-exports.user_signin_post = [
+exports.user_signin_post = function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) return next(err)
+    if (!user) {
+      return res.redirect('/quiz/user/')
+    }
+    req.logIn(user, function(err) {
+      if (err) return next(err);
+      return res.redirect('/quiz/user/' + user.username);
+    });
+  })(req, res, next);
+}
+
+/*exports.user_signin_post = [
   // Validate user input from the form.
   body('userDetail', 'Username or email required').isLength({ min: 1 }).trim(),
   body('password', 'Password required').isLength({ min: 1 }),
@@ -68,7 +87,7 @@ exports.user_signin_post = [
   sanitizeBody('*'),
 
   // Process request
-  (req, res, err) => {
+  (req, res, next) => {
     // Save errors from validation, if any.
     const errors = validationResult(req);
 
@@ -83,18 +102,41 @@ exports.user_signin_post = [
       // There are errors so render form with the values.
       res.render('user_form', { title: 'Welcome! Enter details to continued', signinError: 'Error in sign up. Please try again', user: user, errors: errors })
     } else {
-      User.authenticate(req.body.userDetail, req.body.password, function(error, user) {
-        console.log(req.body.userDetail, req.body.password);
-        if (error || !user) {
-          res.render('user_form', { title: 'Welcome! Enter details to continue', signinError: 'Wrong username, email or password', user: user })
-        } else {
-          req.session.userId = user._id;
-          res.redirect('/quiz/user/' + user.username);
-        }
+    passport.authenticate('local', function(err, user, info) {
+      // console.log(local)
+      if (err) { return next(err); }
+      if (!user) {
+        return res.redirect('/quiz/user/signin')
+      }
+      req.logIn(user, function(err) {
+        if (err) { return next(err); }
+        return res.redirect('/');
       });
-    }
+    });
+    // User.authenticate(req.body.userDetail, req.body.password, function(error, user) {
+    //   console.log(req.body.userDetail, req.body.password);
+    //   if (error || !user) {
+    //     res.render('user_form', { title: 'Welcome! Enter details to continue', signinError: 'Wrong username, email or password', user: user })
+    //   } else {
+    //     req.session.userId = user._id;
+    //     res.redirect('/quiz/user/' + user.username);
+    //   } 
+    // });
+    // }
   }
-];
+];*/
+
+// Handle change USER password on GET.
+// exports.user_changepassword_get = function(req, res, next) {
+//   res.send('NOT HERE YET');
+// }
+
+// Handle change USER password on POST.
+exports.user_changepassword_post = [
+  // Check if passwords meet minimum requirement
+  body('newpassword').isLength({ min: 5 }),
+  body('confirmpassword').isLength({ min: 5 }),
+]
 
 // Display User detail form on GET.
 exports.user_profile = function(req, res, next) {
@@ -108,18 +150,20 @@ exports.user_profile = function(req, res, next) {
 
 // Log out the user.
 exports.user_logout_get = function(req, res, next) {
-  if (req.session) {
+  req.logout();
+  res.redirect('/');
+  /*if (req.session) {
     // Delete the session object
     req.session.destroy(function(err) {
       if (err) {
         return next(err);
       } else {
-        return res.redirect('/quiz');
+        return res.redirect('/quiz/user/signin');
       }
     });
   } else {
     console.log('Logout not working');
-  }
+  }*/
 }
 
 // Display User update form on GET.
