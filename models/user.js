@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
-const passport = require('passport'),
-  LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy;
 
 const UserSchema = new Schema({
   // first_name: { type: String, required: true, max: 60 },
@@ -54,7 +54,9 @@ UserSchema.statics.authenticate = function(userInput, password, callback) {
 
 // Setup LocalStrategy with passport for username/password authentication.
 passport.use(new LocalStrategy(function(username, password, done) {
-  User.findOne({ $or: [{ username: userInput }, { email: userInput }] }, function(err, user) {
+  User.findOne({ $or: [{ username: username }, { email: username }] }, function(err, user) {
+    console.log(username);
+    console.log('It got to localStrategy');
     if (err) return done(err);
     if (!user) return done(null, false, { message: 'Incorrect username.' });
     user.comparePassword(password, function(err, isMatch) {
