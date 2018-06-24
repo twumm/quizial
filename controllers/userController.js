@@ -129,16 +129,17 @@ exports.user_changepassword_post = [
         if (err) { return next(err);}
         // There are errors in the field values so render form with the values.
         if (!errors.isEmpty()) {
+          req.flash('error', 'Password entered is invalid. Kindly try again.');
           res.redirect(user.url);
         }
         else {
           user.password = req.body.password;
-          console.log(req.body.password);
           // Save the user's new password.
           user.save(function(err) {
             if (err) { return next(err); }
             // Successful so save login and redirect to user profile.
             req.logIn(user, function(err) {
+              req.flash('success', 'Password successfully changed.');
               res.redirect(user.url);
             });
           });
