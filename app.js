@@ -11,6 +11,7 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const crypto = require('crypto');
+const flash = require('express-flash');
 
 // Set up mongoose connection.
 const mongoose = require('mongoose');
@@ -49,10 +50,9 @@ app.use(session({
   })
 }));
 
-// Add Passport middleware.
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', quiz);
