@@ -5,7 +5,7 @@ const { body, validationResult } = require('express-validator/check/');
 const { sanitizeBody } = require('express-validator/filter');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+// const LocalStrategy = require('passport-local').Strategy;
 
 
 // Display User signup form on GET.
@@ -157,6 +157,46 @@ exports.user_profile = function(req, res, next) {
     })
     // res.send('NOT IMPLEMENTED: User detail get ' + req.params.username);
 };
+
+exports.user_forgotpassword_get = function(req, res, next) {
+  res.render('user_forgot_password');
+}
+
+exports.user_forgotpassword_post = [
+  // Validate fields from the form.
+  body('email', 'Email required').isEmail().trim(),
+  body('emailConfirm', 'Email required').isEmail().trim(),
+
+  // Sanitize fields.
+  sanitizeBody('*'),
+
+  // Process request.
+  (req, res, next) => {
+    // Save errors from validation, if any.
+    const errors = validationResult(req);
+    // Check if emails entered are the same.
+    if (req.body.email !== req.body.emailConfirm) {
+      req.flash('error', 'Kindly ensure emails entered are the same.');
+      res.redirect('back');
+    }
+    // If form validation failed, redirect back to form.
+    if (!errors.isEmpty()) {
+      req.flash('error', 'Please enter valid emails.');
+      res.redirect('back');
+    }
+    // Search for user with the email entered.
+    User.findOne({email: req.body.email})
+      .exec(function(err, user) {
+        if (err) {return next(err);}
+        
+      })
+  }
+]
+
+/*function(req, res, next) {
+  req.flash('success', 'Check your email to reset your password.')
+  res.render('user_form');
+}*/
 
 // Log out the user.
 exports.user_logout_get = function(req, res, next) {
