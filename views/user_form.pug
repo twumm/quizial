@@ -1,30 +1,31 @@
 extends layout
 block content
-
+  
   h4= title
-    if signinError || signupError
-      p= signinError || signupError 
-    div(class='row')
-      div(class='col-sm-6')
-        form(method='POST' action='/quiz/user/signin')
-          div.form-group
-            p Login
-            label(for='username') Email or Username
-            input#userInput.form-control(type='text' name='username' placeholder='Email or username' required='true')
-            label(for='password') Password
-            input#password.form-control(type='password' name='password' placeholder='Password' required='true')
-          button.btn.btn-outline-primary(type='submit') Log In
+  if signinError || signupError
+    p= signinError || signupError 
+  div(class='row')
+    div(class='col-sm-6')
+      form(method='POST' action='/quiz/user/signin')
+        div.form-group
+          p Login
+          label(for='username') Email or Username
+          input#userInput.form-control(type='text' name='username' placeholder='Email or username' required='true')
+          label(for='password') Password
+          input#password.form-control(type='password' name='password' placeholder='Password' required='true')
+          a(href='/quiz/user/forgot-password') Forgot Password?
+        button.btn.btn-outline-primary(type='submit') Log In
 
-      //- div(class='col-sm-')
+    //- div(class='col-sm-')
 
-      div(class='col-sm-6')
-        form(method='POST' action='/quiz/user/signup')
-          div.form-group
-            p Sign Up
-            label(for='email') Email
-            input#email.form-control(type='text' name='email' placeholder='Email' required='true')
-            label(for='username') Username
-            input#username.form-control(type='text' name='username' placeholder='Username' required='true')
-            label(for='password') Password
-            input#signupPassword.form-control(type='password' name='password' placeholder='Password' required='true')
-          button.btn.btn-outline-success(type='submit') Sign Up
+    div(class='col-sm-6')
+      form(method='POST' action='/quiz/user/signup')
+        div.form-group
+          p Sign Up
+          label(for='email') Email
+          input#email.form-control(type='text' name='email' placeholder='Email' required='true')
+          label(for='username') Username
+          input#username.form-control(type='text' name='username' placeholder='Username' required='true')
+          label(for='password') Password
+          input#signupPassword.form-control(type='password' name='password' placeholder='Password' required='true')
+        button.btn.btn-outline-success(type='submit') Sign Up
