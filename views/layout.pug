@@ -5,20 +5,13 @@ html(lang='en')
     //- Require meta tags
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1')
-    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm' crossorigin="anonymous")
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous")
+    //- link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm' crossorigin="anonymous")
     script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js' integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN' crossorigin='anonymous')
-    //- script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js')
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous")
     script(defer src='https://use.fontawesome.com/releases/v5.0.8/js/all.js')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    //- Local stylesheet and js
-    //- link(rel='stylesheet', href='/stylesheets/bootstrap/bootstrap.min.css')
-    //- script(src='/javascripts/bootstrap/bootstrap.min.js')
-    //- script(src='/javascripts/jquery-3.2.1.min.js')
-    //- Online stylesheet and js
-    //- link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous")
-    //- script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
-    //- script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous")
+    
   body
     nav(class='navbar navbar-light bg-light navbar-expand-lg border-bottom')
       div(class='container')
@@ -26,13 +19,12 @@ html(lang='en')
         button(class='navbar-toggler' data-toggle='collapse' data-target='#navbarCollapse')
           span(class='navbar-toggler-icon')
         div(class='collapse navbar-collapse' id='navbarCollapse')
-          ul(class='navbar-nav ml-auto')
+          ul(class='navbar-nav ml-auto list-inline')
             //- li(class='navbar-item active') User 
             if !user
-              li(class='navbar-item') 
+              li(class='navbar-item list-inline-item') 
                 a(href='/quiz/user/signin') Login
-                | / 
-              li(class='navbar-item')
+              li(class='navbar-item list-inline-item')
                 a(href='/quiz/user/signup')  Sign up
             else
               div.btn-group
@@ -57,5 +49,5 @@ html(lang='en')
             p= messages.success
             button.close(type='button' data-dismiss='alert' aria-label='Close')
               span(aria-hidden='true') &times;
-        block content
-
+        div(class='container')
+          block content
