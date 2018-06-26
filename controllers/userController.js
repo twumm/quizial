@@ -5,7 +5,9 @@ const { body, validationResult } = require('express-validator/check/');
 const { sanitizeBody } = require('express-validator/filter');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-// const LocalStrategy = require('passport-local').Strategy;
+const async = require('async');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 
 
 // Display User signup form on GET.
@@ -184,12 +186,56 @@ exports.user_forgotpassword_post = [
       req.flash('error', 'Please enter valid emails.');
       res.redirect('back');
     }
-    // Search for user with the email entered.
-    User.findOne({email: req.body.email})
-      .exec(function(err, user) {
-        if (err) {return next(err);}
-        
-      })
+
+    // Create token and save to user requesting for password reset.
+    async.waterfall([
+      function(callback) {
+        crypto.randomBytes(20, function(err, buf) {
+          let token = buf.toString('hex');
+          callback(err, token);
+        });
+      },
+      function(token, callback) {
+        User.findOne({email: req.body.email}, function(err, user) {
+          if (!user) {
+            req.flash('error', 'No account with that email address exists.');
+            return res.redirect('back');
+          }
+          // User found so set reset password token and expiry date.
+          user.resetPasswordToken = token;
+          user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+          user.save(function(err) {
+            callback(err, token, user);
+          });
+        });
+      },
+      function(token, user, callback) {
+        let transporter = nodemailer.createTransport('SMTP', {
+          host: 'smtp.sendgrid.net',
+          port: 587,
+          auth: {
+            user: 'twumm',
+            pass: 'Just@sendgrid18'
+          }
+        });
+        let mailOptions = {
+          to: user.email,
+          from: 'martint.mensah@gmail.com',
+          subject: 'Quizial Password Reset',
+          text: `You are receiving this email because you (or someone else) requested for a password reset on Quizial.
+          Please click this link to reset your password http://${req.headers.host}/reset/${token} 
+          Kindly ignore if you did not request for this password reset.`
+        }
+        transporter.sendMail(mailOptions), err => {
+          req.flash('info', `An email has been sent to ${user.email} with instructions to reset password.`);
+          callback(err, 'callback');
+        };
+      }
+    ], function(err) {
+        if (err) return next(err);
+        res.redirect('back');
+    });
   }
 ]
 
