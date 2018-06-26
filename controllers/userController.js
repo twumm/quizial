@@ -9,7 +9,6 @@ const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const sgMail = require('@sendgrid/mail');
-const sgApiKey = process.env.SENDGRID_API_KEY;
 require('dotenv').config();
 
 
