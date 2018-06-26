@@ -228,8 +228,7 @@ exports.user_forgotpassword_post = [
         });
       },
       function(token, user, callback) {
-        // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-        sgMail.setApiKey('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');
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
         const msg = {
           to: user.email,
           from: 'martint.mensah@gmail.com',
