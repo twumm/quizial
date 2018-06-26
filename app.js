@@ -77,4 +77,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// Detect and keep track of unhandled promises.
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at:', p, 'reason:', reason);
+  // application specific logging, throwing an error, or other logic here
+});
+
 module.exports = app;
