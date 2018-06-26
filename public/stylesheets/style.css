@@ -1,12 +1,16 @@
-body {
-  /*padding: 50px;*/
-  /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
-}
+/*body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}*/
 
-a {
+/*a {
   color: #00B7FF;
-}
+}*/
 
-label {
+/*label {
   font-size: 18px;
+}*/
+
+p {
+  font-size: 12px !important;
 }
