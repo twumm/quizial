@@ -247,18 +247,6 @@ exports.user_forgotpassword_post = [
 exports.user_logout_get = function(req, res, next) {
   req.logout();
   res.redirect('/');
-  /*if (req.session) {
-    // Delete the session object
-    req.session.destroy(function(err) {
-      if (err) {
-        return next(err);
-      } else {
-        return res.redirect('/quiz/user/signin');
-      }
-    });
-  } else {
-    console.log('Logout not working');
-  }*/
 }
 
 // Display User update form on GET.
