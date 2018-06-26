@@ -10,6 +10,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const sgMail = require('@sendgrid/mail');
 const sgApiKey = process.env.SENDGRID_API_KEY;
+require('dotenv').config();
 
 
 // Display User signup form on GET.
@@ -188,22 +189,6 @@ exports.user_forgotpassword_post = [
       req.flash('error', 'Please enter valid emails.');
       res.redirect('back');
     }
-    // else {
-      /*sgMail.setApiKey('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');
-        const msg = {
-          to: 'martint.mensah@gmail.com',
-          from: 'test@example.com',
-          subject: 'Quizial Password Reset',
-          text: `You are receiving this email because you (or someone else) requested for a password reset on Quizial.
-          Please click this link to reset your password http://${req.headers.host}/reset/ 
-          Kindly ignore if you did not request for this password reset.`
-        };
-        console.log(msg);
-        sgMail.send(msg);
-        return res.redirect('/quiz');*/
-
-
-      // res.redirect('/quiz/user/signin');
       // Create token and save to user requesting for password reset.
     async.waterfall([
       function(callback) {
@@ -239,17 +224,18 @@ exports.user_forgotpassword_post = [
         };
         // console.log(msg);
         sgMail.send(msg);
+      }
+      /*, function(err, callback) {
+        if (err) return next(err);
         req.flash('info', `An e-mail has been sent to ${user.email} with further instructions.`);
         res.redirect('/quiz/user/signin');
-
-      }
+      }*/
     ], function (err, callback) {
         if (err) return next(err);
         req.flash('error', 'Hmmm something went wrong. Please try again later.');
         res.redirect(`back`);
     });
     // }
-    
   }
 ]
 
