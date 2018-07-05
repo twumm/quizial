@@ -240,7 +240,7 @@ exports.user_forgotpassword_post = [
 
 // Display reset user password on GET.
 exports.user_reset_get = function(req, res, next) {
-  User.findOne({ resetPasswordToken: req.params.reset_token })
+  User.findOne({ resetPasswordToken: req.params.reset_token, resetPasswordExpires: { $gt: Date.now()} })
     .exec(function(err, user) {
       if (err || user == null ) {
         req.flash('error', 'Token is invalid. Kindly try resetting your password again.');
