@@ -28,16 +28,18 @@ router.get('/user/forgot-password', user_controller.user_forgotpassword_get);
 router.post('/user/forgot-password', user_controller.user_forgotpassword_post);
 
 // GET request to reset password.
-router.get('/user/reset/:reset-token', user_controller.user_reset_get);
+router.get('/user/reset/:reset_token', user_controller.user_reset_get);
 
 // POST request to reset password.
-router.post('/user/reset/:reset-token', user_controller.user_reset_post);
+router.post('/user/reset/:reset_token', user_controller.user_reset_post);
 
 // GET request log user out.
 router.get('/user/logout', user_controller.user_logout_get);
 
 // GET request for user profile.
 router.get('/user/:username', user_controller.user_profile);
+
+
 
 // GET request to update a User.
 router.get('/user/:id/update', user_controller.user_update_get);
