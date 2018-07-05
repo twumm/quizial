@@ -242,7 +242,6 @@ exports.user_forgotpassword_post = [
 exports.user_reset_get = function(req, res, next) {
   User.findOne({ resetPasswordToken: req.params.reset_token })
     .exec(function(err, user) {
-      console.log(user);
       if (err || user == null ) {
         req.flash('error', 'Token is invalid. Kindly try resetting your password again.');
         res.redirect('/quiz');
