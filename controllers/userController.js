@@ -218,10 +218,10 @@ exports.user_forgotpassword_post = [
           from: 'martint.mensah@gmail.com',
           subject: 'Quizial Password Reset',
           text: `You are receiving this email because you (or someone else) requested for a password reset on Quizial.
-          Please click this link to reset your password http://${req.headers.host}/reset/${token}.
+          Please click this link to reset your password http://${req.headers.host}/quiz/user/reset/${token}.
           Kindly ignore if you did not request for this password reset.`
         };
-        // console.log(msg);
+        console.log(msg);
         sgMail.send(msg);
       }
       /*, function(err, callback) {
@@ -238,10 +238,24 @@ exports.user_forgotpassword_post = [
   }
 ]
 
-/*function(req, res, next) {
-  req.flash('success', 'Check your email to reset your password.')
-  res.render('user_form');
-}*/
+// Display reset user password on GET.
+exports.user_reset_get = function(req, res, next) {
+  User.findOne({ resetPasswordToken: req.params.reset_token })
+    .exec(function(err, user) {
+      console.log(user);
+      if (err || user == null ) {
+        req.flash('error', 'Token is invalid. Kindly try resetting your password again.');
+        res.redirect('/quiz');
+      }
+      res.render('user_forgot_password', {title: 'Reset password now', user: user})
+    });
+  // res.send('NOT IMPLEMENTED: User password reset get');
+}
+
+// Handle reset user password on POST.
+exports.user_reset_post = function(req, res, next) {
+  res.send('NOT IMPLEMENTED: User password reset post');
+}
 
 // Log out the user.
 exports.user_logout_get = function(req, res, next) {
