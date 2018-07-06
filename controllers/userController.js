@@ -42,14 +42,14 @@ exports.user_signup_post = [
 
     if (!errors.isEmpty()) {
       // There are errors in the sign up form data.
-      res.redirect('/quiz/user/signin');
+      return res.redirect('/quiz/user/signin');
     } else {
       // No errors so create user in db.
       user.save(function(err) {
         if (err) { return next(err); }
         // Successful so save login and redirect to user profile.
         req.logIn(user, function(err) {
-          res.redirect(user.url);
+          return res.redirect(user.url);
         });
         // req.session.userId = user._id;
         // res.redirect(user.url);
@@ -61,7 +61,7 @@ exports.user_signup_post = [
 // Display User create form on GET.
 exports.user_signin_get = function(req, res, next) {
   if (req.user) {
-    res.redirect('/quiz/user/' + req.user.username)
+    return res.redirect('/quiz/user/' + req.user.username)
   }
   res.render('user_form', { title: 'Welcome! Enter details to continue', user: req.user });
   // res.send('NOT IMPLEMENTED: User signin get');
