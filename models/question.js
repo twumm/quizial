@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const QuestionSchema = new Schema({
   question: { type: String, max: 1000, required: true },
+  answer: { type: Schema.ObjectId, ref: 'Answer', required: true },
   usersCorrect: [{ type: Schema.ObjectId, ref: 'User' }],
   usersAttempted: [{ type: Schema.ObjectId, ref: 'User' }],
   submittedBy: { type: Schema.ObjectId, ref: 'User' },

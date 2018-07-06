@@ -9,7 +9,7 @@ const async = require('async');
 
 // Display Question create form on GET.
 exports.question_create_get = function(req, res, next) {
-  res.render('question_form', { title: 'Create a question' });
+  res.render('question_form', { title: 'Create a question', user: req.user });
   // res.send('NOT IMPLEMENTED: Question create get');
 }
 
@@ -41,7 +41,8 @@ exports.question_create_post = [
     // Create question variable to contain question from the form.
     const question = new Question({
       question: req.body.question,
-      answer: answer._id
+      answer: answer._id,
+      submittedBy: req.user ? req.user._id : undefined
     });
 
     // If there are errors, render form with values.
