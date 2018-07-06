@@ -96,6 +96,7 @@ exports.user_signin_post = [
       passport.authenticate('local', function(err, user, info) {
         if (err) return next(err)
         if (!user) {
+          req.flash('error', 'User does not exist')
           return res.redirect('/quiz/user/signin')
         }
         req.logIn(user, function(err) {
@@ -115,8 +116,8 @@ exports.user_signin_post = [
 // Handle change USER password on POST.
 exports.user_changepassword_post = [
   // Check if passwords meet minimum requirement
-  body('password').isLength({ min: 4 }),
-  body('confirmpassword').isLength({ min: 4 }),
+  body('password', 'Password must be more than 6 characters').isLength({ min: 6 }),
+  body('confirmpassword').isLength({ min: 6 }),
 
   // Sanitize fields.
   sanitizeBody('*'),
@@ -169,7 +170,7 @@ exports.user_forgotpassword_get = function(req, res, next) {
 exports.user_forgotpassword_post = [
   // Validate fields from the form.
   body('email', 'Email required').isEmail().trim(),
-  body('emailConfirm', 'Email required').isEmail().trim(),
+  body('emailConfirm', 'Emails do not match').isEmail().trim(),
 
   // Sanitize fields.
   sanitizeBody('*'),
@@ -181,12 +182,12 @@ exports.user_forgotpassword_post = [
     // Check if emails entered are the same.
     if (req.body.email !== req.body.emailConfirm) {
       req.flash('error', 'Kindly ensure emails entered are the same.');
-      res.redirect('back');
+      return res.redirect('back');
     }
     // If form validation failed, redirect back to form.
     if (!errors.isEmpty()) {
       req.flash('error', 'Please enter valid emails.');
-      res.redirect('back');
+      return res.redirect('back');
     }
       // Create token and save to user requesting for password reset.
     async.waterfall([
@@ -232,7 +233,7 @@ exports.user_forgotpassword_post = [
     ], function (err, callback) {
         if (err) return next(err);
         req.flash('error', 'Hmmm something went wrong. Please try again later.');
-        res.redirect(`back`);
+        return res.redirect(`back`);
     });
     // }
   }
@@ -244,7 +245,7 @@ exports.user_reset_get = function(req, res, next) {
     .exec(function(err, user) {
       if (err || user == null ) {
         req.flash('error', 'Token is invalid. Kindly try resetting your password again.');
-        res.redirect('/quiz');
+        return res.redirect('/quiz/user/forgot-password');
       }
       res.render('user_forgot_password', {title: 'Reset password now', user: user})
     });
@@ -252,9 +253,53 @@ exports.user_reset_get = function(req, res, next) {
 }
 
 // Handle reset user password on POST.
-exports.user_reset_post = function(req, res, next) {
+exports.user_reset_post = [
+  // Validate input from form.
+  body('password', 'Password must be atleast 6 characters.').isLength({ min: 6 }),
+  body('passwordConfirm', 'Passwords must be the same for both fields.').isLength({ min: 6 }),
+
+  // Sanitize the fields.
+  sanitizeBody('*'),
+
+  // Process the request.
+  (req, res, next) => {
+    // Save any errors from validation.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      req.flash('error', 'Please enter valid passwords.');
+      return res.redirect('back');
+    }
+    // No errors so search for user.
+    User.findOne({ resetPasswordToken: req.params.reset_token, resetPasswordExpires: { $gt: Date.now()} })
+      .exec(function (err, user) {
+        if (err) { return next(err);}
+        if (!user) {
+          req.flash('error', 'Password reset token is invalid or has expired.');
+          return res.redirect('back');
+        }
+        else {
+          user.password = req.body.password;
+          user.resetPasswordToken = undefined;
+          user.resetPasswordExpires = undefined;
+          // Save the user's new password.
+          user.save(function(err) {
+            if (err) { return next(err); }
+            // Successful so save login and redirect to user profile.
+            req.logIn(user, function(err) {
+              req.flash('success', 'Password successfully changed.');
+              return res.redirect(user.url);
+            });
+          });
+        }
+      })
+  }
+]
+
+
+/*function(req, res, next) {
   res.send('NOT IMPLEMENTED: User password reset post');
-}
+}*/
 
 // Log out the user.
 exports.user_logout_get = function(req, res, next) {
