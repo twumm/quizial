@@ -4,7 +4,7 @@ const Answer = require('../models/answer');
 
 // Display quiz home on GET.
 exports.quiz_home_get = function(req, res, next) {
-  res.send('NOT IMPLEMENTED: Quiz home page')
+  res.render('quiz_start', {user: req.user});
 }
 
 // Display quiz on GET.
