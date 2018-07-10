@@ -2,15 +2,12 @@ extends layout
 block content
 
   h1= title
-  each question in questions
-    p #{question}
-    p Question: #{question.question}
-    p Possible answers:
-    form(method='POST')
-      each answer in question.answer.answerOption.sort((a, b)=>{return 0.5 - Math.random()})
-        //- p= answer
-        div.form-check
-          input.form-check-input(type='radio' name='possible-answers' id=answer value=answer+'1')
-          label.form-check-label(for=answer) #{answer}
-    
-
+  h6 Question: #{quiz.question}
+  p Possible answers:
+  form(method='POST')
+    each answer in quiz.answer.answerOption.sort((a, b)=>{return 0.5 - Math.random()})
+      //- p= answer
+      div.form-check
+        input.form-check-input(type='radio' name='possible-answers' id=answer value=answer+'1')
+        label.form-check-label(for=answer) #{answer}
+    button.btn.btn-outline-success(type='submit') Submit
