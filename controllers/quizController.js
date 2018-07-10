@@ -12,6 +12,11 @@ exports.quiz_home_get = function(req, res, next) {
 exports.quiz_display_get = function(req, res, next) {
   // res.send('NOT IMPLEMENTED: Quiz display get');
   // Query for questions in the db.
+
+  /*TODO - add questions attempted var(num) to track number of questions
+  answered in a session. If number is equal to the quizzes a user is 
+  required to take, redirect to results page and reset questions attempted.*/
+
   async.parallel({
     question: callback => {
       Question.count()
