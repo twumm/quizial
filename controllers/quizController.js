@@ -34,7 +34,9 @@ exports.quiz_display_get = function(req, res, next) {
   }, (err, results) => {
     // console.log(results);
     if (err) { return next(err);}
-    
+    if (!results.user.questionsAttempted.includes(results.question._id)) {
+      res.render('quiz_display', { quiz: results.question, user: req.user})
+    }
   })
 
   /*Question.find()
