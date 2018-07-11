@@ -68,7 +68,7 @@ exports.question_create_post = [
         )}
       }, function(err, callback) {
         if (err) { return next(err); }
-        req.flash('success', `${question.question} has been added!`);
+        req.flash('success', `Question: '${question.question}' has been successfully added!`);
         return res.redirect('/');
       })
     }
