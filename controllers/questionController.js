@@ -45,6 +45,9 @@ exports.question_create_post = [
       submittedBy: req.user ? req.user._id : undefined
     });
 
+    // Query for user and save the question id to the user table.
+    
+
     // If there are errors, render form with values.
     if (!errors.isEmpty()) {
       res.render('question_form', { title: 'Please check for errors', question: question, answers: answer, errors: errors });
@@ -55,7 +58,14 @@ exports.question_create_post = [
         },
         save_answer: function(callback) {
           answer.save(callback);
-        }
+        },
+        save_user_question: function(callback) {
+          User.findById(req.user.id)
+            .exec(function(err, user){
+              user.questionsPosted.push(question._id);
+              user.save(callback);
+          }
+        )}
       }, function(err, callback) {
         if (err) { return next(err); }
         return res.redirect('/');
