@@ -32,15 +32,17 @@ exports.question_create_post = [
 
     // Create answer variable for correct answer.
     const answer = new Answer({
-      answerCorrect: req.body.correctOption,
-      answerOption: [req.body.correctOption, req.body.wrongOptionOne,
-        req.body.wrongOptionTwo, req.body.wrongOptionThree
+      answerCorrect: req.body.correctOption.toLowerCase(),
+      answerOption: [req.body.correctOption.toLowerCase(), 
+        req.body.wrongOptionOne.toLowerCase(),
+        req.body.wrongOptionTwo.toLowerCase(),
+        req.body.wrongOptionThree.toLowerCase()
       ]
     });
 
     // Create question variable to contain question from the form.
     const question = new Question({
-      question: req.body.question,
+      question: req.body.question.toLowerCase(),
       answer: answer._id,
       submittedBy: req.user ? req.user._id : undefined
     });
