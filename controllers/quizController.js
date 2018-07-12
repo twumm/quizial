@@ -7,9 +7,11 @@ const async = require('async');
 exports.quiz_home_get = function(req, res, next) {
   User.findById(req.user)
     .exec((err, user) => {
-      // Set questions attempted count to 0 each time user starts the quiz.
+      // Reset questions attempted count, score and question attempted array
+      // each time user starts the quiz.
       user.questionsAttemptedCount = 0
       user.questionsAttempted = []
+      user.score = 0
       user.save()
       res.render('quiz_start', {user: req.user});
     })
