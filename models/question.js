@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const QuestionSchema = new Schema({
   question: { type: String, max: 1000, required: true },
   answer: { type: Schema.ObjectId, ref: 'Answer', required: true },
-  usersCorrect: [{ type: Schema.ObjectId, ref: 'User', unique: true }],
+  usersCorrect: [{ type: Schema.ObjectId, ref: 'User'}],
   usersAttempted: [{ type: Schema.ObjectId, ref: 'User' }],
   submittedBy: { type: Schema.ObjectId, ref: 'User' },
   dateCreated: { type: Date, default: Date.now, required: true },
@@ -14,4 +14,10 @@ const QuestionSchema = new Schema({
   wrongCount: { type: Number, default: 0 },
 });
 
-module.exports = mongoose.model('Question', QuestionSchema);
+// Count number of unique users who answered correctly.
+/*QuestionSchema.statics.uniqueUsersCorrect = (questionID, count) => {
+  
+}*/
+
+const Question = mongoose.model('Question', QuestionSchema);
+module.exports = Question;
