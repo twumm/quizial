@@ -36,14 +36,9 @@ exports.quiz_display_get = function(req, res, next) {
   }, (err, results) => {
     if (err) { return next(err);}
     if (results.user.questionsAttemptedCount == 5) {
-      /*results.user.questionsAttemptedCount = 0
-      results.user.save()*/
       return res.render('quiz_result', {user: req.user})
     }
     if (!results.user.questionsAttempted.includes(results.question._id)) {
-      // results.user.questionsAttempted.push(results.question._id);
-      // results.user.save();
-      console.log(results.question._id)
       res.render('quiz_display', { quiz: results.question, user: req.user})
     }
   })
@@ -73,36 +68,28 @@ exports.quiz_response_post = function(req, res, next) {
     }
   }, (err, results) => {
       if (err) { return next(err); }
-      console.log(results.question.answer.answerCorrect)
       if (results.question.answer.answerCorrect !== userAnswer) {
         results.user.questionsAttempted.push(results.question._id)
         results.user.questionsAttemptedCount++
+        results.question.wrongCount++
         /*results.user.save(
           {$push: {questionsAttempted: results.question._id}},
           {$inc: {questionsAttemptedCount: 1}})*/
         results.user.save()
+        results.question.save()
         res.redirect('back')
       }
       else if (results.question.answer.answerCorrect === userAnswer) {
         results.user.questionsCorrect.push(results.question._id)
+        results.question.usersCorrect.push(results.user._id)
         results.user.questionsAttemptedCount++
+        results.question.correctCount++
         results.user.save()
+        results.question.save()
         res.redirect('back')
       }
   })
-  /*Question.findById(req.body.questionID)
-    .populate('answer')
-    .exec((err, question) => {
-      if (err) { return next(err);}
-      if (question.answer.answerCorrect !== userAnswer) {
-        res.redirect('back')
-      }
-      else if (question.answer.answerCorrect === userAnswer) {
-
-      }
-      console.log(question);
-    })*/
-  console.log(req.body.possibleAnswer)
-  console.log(req.body.questionID)
+  // console.log(req.body.possibleAnswer)
+  // console.log(req.body.questionID)
   // res.redirect('back')
 }
