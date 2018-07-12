@@ -13,9 +13,9 @@ const UserSchema = new Schema({
   // passwordConf: { type: String, required: true },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
+  questionsAttemptedCount: {type: Number, default: 0},
   questionsPosted: [{ type: Schema.ObjectId, ref: 'Question' }],
   questionsAttempted: [{ type: Schema.ObjectId, ref: 'Question' }],
-  questionsAttemptedCount: {type: Number},
   questionsCorrect: [{ type: Schema.ObjectId, ref: 'Question' }]
     // birthday: Date,
     // bio: { type: String, max: 2000 },
