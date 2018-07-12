@@ -4,14 +4,14 @@ const Schema = mongoose.Schema;
 const QuestionSchema = new Schema({
   question: { type: String, max: 1000, required: true },
   answer: { type: Schema.ObjectId, ref: 'Answer', required: true },
-  usersCorrect: [{ type: Schema.ObjectId, ref: 'User' }],
+  usersCorrect: [{ type: Schema.ObjectId, ref: 'User', unique: true }],
   usersAttempted: [{ type: Schema.ObjectId, ref: 'User' }],
   submittedBy: { type: Schema.ObjectId, ref: 'User' },
   dateCreated: { type: Date, default: Date.now, required: true },
-  dateUpdated: { type: Date, default: Date.now, required: true }
+  dateUpdated: { type: Date, default: Date.now, required: true },
   // seenCount: { type: Number, default: 0 },
-  // correctCount: { type: Number, default: 0 },
-  // wrongCount: { type: Number, default: 0 },
+  correctCount: { type: Number, default: 0 },
+  wrongCount: { type: Number, default: 0 },
 });
 
 module.exports = mongoose.model('Question', QuestionSchema);
