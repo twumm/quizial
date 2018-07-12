@@ -5,7 +5,15 @@ const async = require('async');
 
 // Display quiz home on GET.
 exports.quiz_home_get = function(req, res, next) {
-  res.render('quiz_start', {user: req.user});
+  User.findById(req.user)
+    .exec((err, user) => {
+      // Set questions attempted count to 0 each time user starts the quiz.
+      user.questionsAttemptedCount = 0
+      user.questionsAttempted = []
+      user.save()
+      res.render('quiz_start', {user: req.user});
+    })
+  
 }
 
 // Display quiz on GET.
@@ -38,8 +46,12 @@ exports.quiz_display_get = function(req, res, next) {
     if (results.user.questionsAttemptedCount == 5) {
       return res.render('quiz_result', {user: req.user})
     }
-    if (!results.user.questionsAttempted.includes(results.question._id)) {
+    if (!results.user.questionsAttempted.includes(results.question._id) &&
+        !results.user.questionsCorrect.includes(results.question._id)) {
       res.render('quiz_display', { quiz: results.question, user: req.user})
+    }
+    else {
+      res.render(('quiz_result', {user: req.user, error: 'No more questions!'}))
     }
   })
 
@@ -87,6 +99,10 @@ exports.quiz_response_post = function(req, res, next) {
         results.user.questionsCorrect.push(results.question._id)
         // Track number of questions user has attempted.
         results.user.questionsAttemptedCount++
+        // Increment user's temporary score.
+        results.user.score++
+        // User answered correctly so add to all time score.
+        results.user.allTimeScore++
         // Add users who answered correctly to the question's table.
         results.question.usersCorrect.push(results.user._id)
         // Add user who attempted the question to the question's table.
