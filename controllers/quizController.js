@@ -71,7 +71,7 @@ exports.quiz_response_post = function(req, res, next) {
       console.log(results.question.answer.answerCorrect)
       if (results.question.answer.answerCorrect !== userAnswer) {
         results.user.questionsAttempted.push(results.question._id)
-        // results.user.questionsAttemptedCount++
+        results.user.questionsAttemptedCount++
         /*results.user.save(
           {$push: {questionsAttempted: results.question._id}},
           {$inc: {questionsAttemptedCount: 1}})*/
@@ -80,7 +80,7 @@ exports.quiz_response_post = function(req, res, next) {
       }
       else if (results.question.answer.answerCorrect === userAnswer) {
         results.user.questionsCorrect.push(results.question._id)
-        // results.user.questionsAttemptedCount++
+        results.user.questionsAttemptedCount++
         results.user.save()
         res.redirect('back')
       }
