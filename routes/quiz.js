@@ -13,7 +13,7 @@ router.get('/', quiz_controller.quiz_home_get);
 // GET request to display quiz.
 router.get('/quiz', quiz_controller.quiz_display_get);
 
-// POST request to display quiz.
-// router.post('/:id', quiz_controller.quiz_display_post);
+// POST request to handle quiz response.
+router.post('/quiz', quiz_controller.quiz_response_post);
 
 module.exports = router;
