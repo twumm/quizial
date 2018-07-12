@@ -69,21 +69,31 @@ exports.quiz_response_post = function(req, res, next) {
   }, (err, results) => {
       if (err) { return next(err); }
       if (results.question.answer.answerCorrect !== userAnswer) {
+        // Add question attempted to user's table.
         results.user.questionsAttempted.push(results.question._id)
+        // Track number of questions user has attempted.
         results.user.questionsAttemptedCount++
+        // Add user who attempted the question to the question's table.
+        results.question.usersAttempted.push(results.user._id)
+        // Increment number of wrong attempts on a question.
         results.question.wrongCount++
-        /*results.user.save(
-          {$push: {questionsAttempted: results.question._id}},
-          {$inc: {questionsAttemptedCount: 1}})*/
+        // Save the user and question.
         results.user.save()
         results.question.save()
         res.redirect('back')
       }
       else if (results.question.answer.answerCorrect === userAnswer) {
+        // Add question answered correctly to user's table to prevent repetition.
         results.user.questionsCorrect.push(results.question._id)
-        results.question.usersCorrect.push(results.user._id)
+        // Track number of questions user has attempted.
         results.user.questionsAttemptedCount++
+        // Add users who answered correctly to the question's table.
+        results.question.usersCorrect.push(results.user._id)
+        // Add user who attempted the question to the question's table.
+        results.question.usersAttempted.push(results.user._id)
+        // Increment number of correct attempts on a question.
         results.question.correctCount++
+        // Save the user and question.
         results.user.save()
         results.question.save()
         res.redirect('back')
