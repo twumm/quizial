@@ -1,0 +1,11 @@
+extends layout
+block content
+
+  h4 Results here
+  h6 Questions attempted: #{user.questionsAttemptedCount}
+  //- Button to take new quiz
+  div.row.text-center
+    form(method='GET' action='/')
+      button.btn.btn-outline-success(type='submit') Start New Quiz
+      
+  
