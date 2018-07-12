@@ -15,6 +15,7 @@ const UserSchema = new Schema({
   resetPasswordExpires: Date,
   questionsPosted: [{ type: Schema.ObjectId, ref: 'Question' }],
   questionsAttempted: [{ type: Schema.ObjectId, ref: 'Question' }],
+  questionsAttemptedCount: {type: Number},
   questionsCorrect: [{ type: Schema.ObjectId, ref: 'Question' }]
     // birthday: Date,
     // bio: { type: String, max: 2000 },
