@@ -30,11 +30,16 @@ exports.quiz_display_get = function(req, res, next) {
         })
     },
     user: callback => {
-      User.findOne({username: req.user.username})
+      User.findById(req.user)
         .exec(callback);
     }
   }, (err, results) => {
     if (err) { return next(err);}
+    if (results.user.questionsAttemptedCount == 5) {
+      /*results.user.questionsAttemptedCount = 0
+      results.user.save()*/
+      return res.render('quiz_result', {user: req.user})
+    }
     if (!results.user.questionsAttempted.includes(results.question._id)) {
       // results.user.questionsAttempted.push(results.question._id);
       // results.user.save();
