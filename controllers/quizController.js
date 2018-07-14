@@ -2,6 +2,7 @@ const Question = require('../models/question');
 const User = require('../models/user');
 const Answer = require('../models/answer');
 const async = require('async');
+const {containsObject} = require('../custom-functions/custom')
 
 // Display quiz home on GET.
 exports.quiz_home_get = function(req, res, next) {
@@ -28,6 +29,10 @@ exports.quiz_display_get = function(req, res, next) {
   required to take, redirect to results page and reset questions attempted.*/
 
   async.parallel({
+    questions_count: callback => {
+      Question.count()
+        .exec({}, callback)
+    },
     question: callback => {
       Question.count()
         .exec((err, count) => {
@@ -45,16 +50,38 @@ exports.quiz_display_get = function(req, res, next) {
     }
   }, (err, results) => {
     if (err) { return next(err);}
-    if (results.user.questionsAttemptedCount == 5) {
+    /*if (results.user.questionsAttemptedCount == 5) {
+      console.log(results.questions_count)
       return res.render('quiz_result', {user: req.user})
     }
-    if (!results.user.questionsAttempted.includes(results.question._id) &&
-        !results.user.questionsCorrect.includes(results.question._id)) {
-      res.render('quiz_display', { quiz: results.question, user: req.user})
+    else if (containsObject(results.question._id, results.user.questionsAttempted))
+    {
+      console.log(`In attempted questions: Question id: ${results.question._id}`)
+      console.log(`In if: Is question already answered: ${containsObject(results.question._id, results.user.questionsCorrect)}`)
+      console.log(`In if: Is question already attempted: ${containsObject(results.question._id, results.user.questionsAttempted)}`)
+      // res.render('quiz_result', {user: req.user, error: 'No more questions!'})
+      res.redirect('back')
+    }
+    else if (containsObject(results.question._id, results.user.questionsCorrect))
+    {
+      console.log(`In questions correct: Question id: ${results.question._id}`)
+      console.log(`In if: Is question already answered: ${containsObject(results.question._id, results.user.questionsCorrect)}`)
+      console.log(`In if: Is question already attempted: ${containsObject(results.question._id, results.user.questionsAttempted)}`)
+      res.redirect('back')
     }
     else {
-      res.render(('quiz_result', {user: req.user, error: 'No more questions!'}))
-    }
+      // console.log(`Questions answered correctly by user: ${results.user.questionsCorrect}`)
+      // console.log(`Question id we are currently at: ${typeof(results.user.questionsCorrect[0])}`)
+      // console.log(`Question id we are currently at is: ${results.user.questionsCorrect[0]}`)
+      // console.log(`Question id we are currently at: ${typeof(results.question._id)}`)
+      // console.log(`Question id we are currently at(last): ${results.question._id}`)
+      // console.log(`Is question already in questions answered correctly? ${results.user.questionsCorrect.some(results.question._id)}`)
+      // containsObject(results.question._id, results.user.questionsAttempted)
+      console.log(`In else: Question id: ${results.question._id}`)
+      console.log(`In else: Is question already answered: ${containsObject(results.question._id, results.user.questionsCorrect)}`)
+      console.log(`In else: Is question already attempted: ${containsObject(results.question._id, results.user.questionsAttempted)}`)
+      res.render('quiz_display', { quiz: results.question, user: req.user})
+    }*/
   })
 
   /*Question.find()
@@ -117,7 +144,4 @@ exports.quiz_response_post = function(req, res, next) {
         res.redirect('back')
       }
   })
-  // console.log(req.body.possibleAnswer)
-  // console.log(req.body.questionID)
-  // res.redirect('back')
 }
