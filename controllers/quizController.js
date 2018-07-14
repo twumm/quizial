@@ -50,7 +50,7 @@ exports.quiz_display_get = function(req, res, next) {
     }
   }, (err, results) => {
     if (err) { return next(err);}
-    /*if (results.user.questionsAttemptedCount == 5) {
+    if (results.user.questionsAttemptedCount == 5) {
       console.log(results.questions_count)
       return res.render('quiz_result', {user: req.user})
     }
@@ -81,7 +81,7 @@ exports.quiz_display_get = function(req, res, next) {
       console.log(`In else: Is question already answered: ${containsObject(results.question._id, results.user.questionsCorrect)}`)
       console.log(`In else: Is question already attempted: ${containsObject(results.question._id, results.user.questionsAttempted)}`)
       res.render('quiz_display', { quiz: results.question, user: req.user})
-    }*/
+    }
   })
 
   /*Question.find()
