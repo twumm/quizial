@@ -59,7 +59,8 @@ exports.quiz_display_get = function(req, res, next) {
     }
     // If the current question has already been attempted, do not display. 
     // Redirect to show different question.
-    else if (containsObject(results.question._id, results.user.questionsAttempted))
+    else if (containsObject(results.question._id, results.user.questionsAttempted) 
+            || containsObject(results.question._id, results.user.questionsPosted))
     {
       res.redirect('back')
     }
