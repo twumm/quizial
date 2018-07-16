@@ -14,6 +14,7 @@ const UserSchema = new Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   score: {type: Number, default: 0},
+  lastScore: {type: Number, default: 0},
   allTimeScore: {type: Number, default: 0},
   questionsAttemptedCount: {type: Number, default: 0},
   questionsPosted: [{ type: Schema.ObjectId, ref: 'Question' }],
