@@ -70,10 +70,12 @@ exports.quiz_display_get = function(req, res, next) {
       req.flash('info', 'Woohoo! You have answered all questions. Reset to start over again')
       res.render('quiz_result', {user: req.user})
     }
+    // If quiz has already been answered correctly, display new question.
     else if (containsObject(results.question._id, results.user.questionsCorrect))
     {
       res.render('quiz_display', { quiz: results.question, user: req.user})
     }
+    // Display quiz if the question has not been answered or attempted.
     else {
       res.render('quiz_display', { quiz: results.question, user: req.user})
     }
