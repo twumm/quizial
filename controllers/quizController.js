@@ -13,6 +13,7 @@ exports.quiz_home_get = function(req, res, next) {
       // each time user starts the quiz.
       user.questionsAttemptedCount = 0
       user.questionsAttempted = []
+      user.lastScore = user.score
       user.score = 0
       user.save()
       res.render('quiz_start', {user: req.user});
@@ -68,7 +69,7 @@ exports.quiz_display_get = function(req, res, next) {
             && _.size(results.user.questionsCorrect) == results.questions_count)
     {
       req.flash('info', 'Woohoo! You have answered all questions. Reset to start over again')
-      res.render('quiz_result', {user: req.user})
+      res.render('quiz_result', {user: req.user, quiz_completed: true})
     }
     // If quiz has already been answered correctly, display new question.
     else if (containsObject(results.question._id, results.user.questionsCorrect))
