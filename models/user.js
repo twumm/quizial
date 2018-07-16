@@ -13,6 +13,7 @@ const UserSchema = new Schema({
   // passwordConf: { type: String, required: true },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
+  score: {type: Number, default: 0},
   allTimeScore: {type: Number, default: 0},
   questionsAttemptedCount: {type: Number, default: 0},
   questionsPosted: [{ type: Schema.ObjectId, ref: 'Question' }],
