@@ -1,33 +1,41 @@
+const _ = require('underscore')
 const async = require('async')
+
 const Question = require('../models/question')
 const User = require('../models/user')
 const Answer = require('../models/answer')
 const { containsObject } = require('../custom-functions/custom')
-const _ = require('underscore')
+
 
 // Display quiz home on GET.
-exports.quiz_home_get = function(req, res, next) {
-  res.render('quiz_start', { user: req.user })
+exports.quiz_home_get = (req, res) => {
+  res.render('quiz_home', { user: req.user })
 }
 
-/*exports.quiz_home_get = function (req, res, next) {
-  User.findById(req.user)
-    .exec((err, user) => {
+exports.quiz_start_get = (req, res, next) => {
+  if (!req.user) {
+    req.flash('info', 'Please sign in to play')
+    res.render('quiz_home')
+  } else {
+    User.findById(req.user)
+      .exec((err, user) => {
       // Reset questions attempted count, score and question attempted array
       // each time user starts the quiz.
-      if (err) { return next(err) }
+        if (err) { return next(err) }
 
-      user.questionsAttemptedCount = 0
-      user.questionsAttempted = []
-      user.lastScore = user.score
-      user.score = 0
-      user.save()
-      res.render('quiz_start', { user: req.user })
-    })
-}*/
+        user.questionsAttemptedCount = 0
+        user.questionsAttempted = []
+        user.lastScore = user.score
+        user.score = 0
+        user.save()
+        // res.render('quiz_start', { user: req.user })
+        next()
+      })
+  }
+}
 
 // Display quiz on GET.
-exports.quiz_display_get = function (req, res, next) {
+exports.quiz_display_get = (req, res, next) => {
   // res.send('NOT IMPLEMENTED: Quiz display get');
   // Query for questions in the db.
 
@@ -58,8 +66,7 @@ exports.quiz_display_get = function (req, res, next) {
   }, (err, results) => {
     if (err) { return next(err) }
     // If the user has attempted maximum questions, display results.
-    if (results.user.questionsAttemptedCount == 5) {
-      console.log(results.questions_count)
+    if (results.user.questionsAttemptedCount === 5) {
       res.render('quiz_result', { user: req.user })
     }
     // If the current question has already been attempted, do not display.
@@ -93,7 +100,7 @@ exports.quiz_display_get = function (req, res, next) {
 }
 
 // Handle quiz response/display on POST.
-exports.quiz_response_post = function (req, res, next) {
+exports.quiz_response_post = (req, res, next) => {
   // Save the answer selected by the user.
   const userAnswer = req.body.possibleAnswer
 
