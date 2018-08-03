@@ -1,19 +1,21 @@
-const express = require('express');
-const router = express.Router();
-const quiz_controller = require('../controllers/quizController');
+const express = require('express')
+const quizController = require('../controllers/quizController')
 
-/* GET users listing. */
-// router.get('/', function(req, res, next) {
-//   res.send('respond with a resource');
-// });
+const router = express.Router()
 
 // GET request to display quiz home.
-router.get('/', quiz_controller.quiz_home_get);
+router.get('/', quizController.quiz_home_get)
 
-// GET request to display quiz.
-router.get('/quiz', quiz_controller.quiz_display_get);
+// Reset user variables and start quiz if user is logged in.
+router.get('/quiz-start', quizController.quiz_start_get)
+
+// GET request to display quiz home.
+router.get('/quiz', quizController.quiz_display_get)
+
+// GET request to display quizzes
+// router.get('/quiz', quizController.quiz_display_get);
 
 // POST request to handle quiz response.
-router.post('/quiz', quiz_controller.quiz_response_post);
+router.post('/quiz', quizController.quiz_response_post)
 
-module.exports = router;
+module.exports = router
