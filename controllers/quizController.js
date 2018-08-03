@@ -12,6 +12,13 @@ exports.quiz_home_get = (req, res) => {
   res.render('quiz_home', { user: req.user })
 }
 
+/**
+ * TODO
+ * Clicking on start quiz that not reset questions answered variable.
+ * How to resolve this?
+ * Maybe switch buttons to reset or start quiz based on questionsAttemptedCount
+ */
+
 exports.quiz_start_get = (req, res, next) => {
   if (!req.user) {
     req.flash('info', 'Please sign in to play')
@@ -28,8 +35,8 @@ exports.quiz_start_get = (req, res, next) => {
         user.lastScore = user.score
         user.score = 0
         user.save()
-        // res.render('quiz_start', { user: req.user })
-        next()
+        res.redirect('/quiz')
+        // next()
       })
   }
 }
