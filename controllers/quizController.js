@@ -22,7 +22,7 @@ exports.quiz_home_get = (req, res) => {
 exports.quiz_start_get = (req, res, next) => {
   if (!req.user) {
     req.flash('info', 'Please sign in to play')
-    res.render('quiz_home')
+    res.redirect('back')
   } else {
     User.findById(req.user)
       .exec((err, user) => {
