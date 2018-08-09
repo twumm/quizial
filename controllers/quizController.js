@@ -11,7 +11,6 @@ const { containsObject } = require('../custom-functions/custom')
 exports.quiz_home_get = (req, res) => {
   res.render('quiz_home', { user: req.user })
 }
-
 /**
  * TODO
  * Clicking on start quiz that not reset questions answered variable.
